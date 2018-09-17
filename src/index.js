@@ -1,1 +1,1 @@
-// Initial commit
+export { withEventHandlers } from './withEventHandlers';
