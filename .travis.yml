@@ -1,0 +1,9 @@
+cache:
+  directories:
+    - node_modules
+language: node_js
+script:
+  - yarn prepublishOnly
+  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ] && [ "$TRAVIS_BRANCH" = "master" ]; then yarn deploy-site; fi'
+node_js:
+  - "8"

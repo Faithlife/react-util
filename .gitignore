@@ -1,0 +1,8 @@
+node_modules/
+*.log
+out*/
+dist/
+.DS_Store
+*.*DS_Store
+package-lock.json
+catalog/build/
