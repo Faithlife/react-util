@@ -16,9 +16,9 @@ describe('createDerivedValue', () => {
 		};
 
 		let firstCacheKey = 'apple';
-		let secondCacheKey = 'banana';
+		const secondCacheKey = 'banana';
 
-		const memoized = createDerivedValue(props => [firstCacheKey, secondCacheKey], computeState);
+		const memoized = createDerivedValue(() => [firstCacheKey, secondCacheKey], computeState);
 
 		assert.equal(1, memoized().times);
 		assert.equal(1, memoized().times);
@@ -43,8 +43,8 @@ describe('createDerivedValue', () => {
 	it('rejects keys that do not round trip', () => {
 		class Foo {}
 
-		assert.throws(() => createDerivedValue(props => [new Foo()], () => { }));
-		assert.doesNotThrow(() => createDerivedValue(props => [1], () => { }));
-		assert.doesNotThrow(() => createDerivedValue(props => [{}], () => { }));
-	})
+		assert.throws(() => createDerivedValue(() => [new Foo()], () => {}));
+		assert.doesNotThrow(() => createDerivedValue(() => [1], () => {}));
+		assert.doesNotThrow(() => createDerivedValue(() => [{}], () => {}));
+	});
 });
