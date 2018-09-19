@@ -1,6 +1,9 @@
 # Changelog
 
-### 0.0.2
+### 0.1.1
+* withEventHandlers now extends Component by default, with options argument for opting in to PureComponent
+
+### 0.1.0
 * Added createDerivedValue, useful for creating components that make heavy use of memoized functions
 
 ### 0.0.1
