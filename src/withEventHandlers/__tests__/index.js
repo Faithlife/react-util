@@ -30,10 +30,32 @@ describe('withEventHandlers', () => {
 		);
 
 		// Verify other handlers were not changed
-		assert.equal(onMouseOver, mountedComponent.props().onMouseOver);
+		assert.strictEqual(onMouseOver, mountedComponent.props().onMouseOver);
 
 		mountedComponent.props().onClick({ anotherId: 11 });
-		assert.equal(10, calledWithArgs.rowId);
-		assert.equal(11, calledWithArgs.anotherId);
+		assert.strictEqual(10, calledWithArgs.rowId);
+		assert.strictEqual(11, calledWithArgs.anotherId);
+	});
+
+	it('is not pure by default', () => {
+		const Button = () => (
+			<div>
+				<button />
+			</div>
+		);
+		const WrappedComponent = withEventHandlers({}, Button);
+		assert.strictEqual(true, new WrappedComponent() instanceof React.Component);
+		assert.strictEqual(false, new WrappedComponent() instanceof React.PureComponent);
+	});
+
+	it('is pure when specified', () => {
+		const Button = () => (
+			<div>
+				<button />
+			</div>
+		);
+		const WrappedComponent = withEventHandlers({}, Button, { isPure: true });
+		assert.strictEqual(true, new WrappedComponent() instanceof React.Component);
+		assert.strictEqual(true, new WrappedComponent() instanceof React.PureComponent);
 	});
 });

@@ -1,14 +1,17 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Component } from 'react';
 
 /** Binds event handlers onto functional components.
  *  Any methods specified as arguments to this function
  *  will override handlers declared on the component props.
- *  Usage: withEventHandlers({ onClick: id => this.handleClick(id) })
+ *  Does not extend PureComponent unless specified.
+ *  Usage: withEventHandlers({ onClick: id => this.handleClick(id) }, ComponentToWrap, { isPure: (false|true)})
  */
-export function withEventHandlers(eventHandlers, Component) {
-	return class WithEventHandlers extends PureComponent {
-		static displayName = `WithEventHandlers(${Component.displayName ||
-			Component.name ||
+export function withEventHandlers(eventHandlers, WrappedComponent, options = {}) {
+	const ComponentToExtend = options.isPure ? PureComponent : Component;
+
+	return class WithEventHandlers extends ComponentToExtend {
+		static displayName = `WithEventHandlers(${WrappedComponent.displayName ||
+			WrappedComponent.name ||
 			'Unnamed Component'})`;
 
 		constructor(props) {
@@ -22,7 +25,7 @@ export function withEventHandlers(eventHandlers, Component) {
 		}
 
 		render() {
-			return <Component {...this.props} {...this.eventHandlers} />;
+			return <WrappedComponent {...this.props} {...this.eventHandlers} />;
 		}
 	};
 }
