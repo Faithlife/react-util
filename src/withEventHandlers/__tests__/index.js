@@ -26,8 +26,8 @@ describe('withEventHandlers', () => {
 		const WrappedButton = withEventHandlers(handlers, Button);
 
 		const mountedComponent = shallow(
-			<WrappedButton onClick={() => {}} onMouseOver={onMouseOver} rowId={10} />,
-		);
+			<WrappedButton onClick={() => console.log('FAIL')} onMouseOver={onMouseOver} rowId={10} />,
+		).dive();
 
 		// Verify other handlers were not changed
 		assert.strictEqual(onMouseOver, mountedComponent.props().onMouseOver);
@@ -44,8 +44,9 @@ describe('withEventHandlers', () => {
 			</div>
 		);
 		const WrappedComponent = withEventHandlers({}, Button);
-		assert.strictEqual(true, new WrappedComponent() instanceof React.Component);
-		assert.strictEqual(false, new WrappedComponent() instanceof React.PureComponent);
+		const WrappedComponentType = shallow(<WrappedComponent />).type();
+		assert.strictEqual(true, new WrappedComponentType() instanceof React.Component);
+		assert.strictEqual(false, new WrappedComponentType() instanceof React.PureComponent);
 	});
 
 	it('is pure when specified', () => {
@@ -55,7 +56,8 @@ describe('withEventHandlers', () => {
 			</div>
 		);
 		const WrappedComponent = withEventHandlers({}, Button, { isPure: true });
-		assert.strictEqual(true, new WrappedComponent() instanceof React.Component);
-		assert.strictEqual(true, new WrappedComponent() instanceof React.PureComponent);
+		const WrappedComponentType = shallow(<WrappedComponent />).type();
+		assert.strictEqual(true, new WrappedComponentType() instanceof React.Component);
+		assert.strictEqual(true, new WrappedComponentType() instanceof React.PureComponent);
 	});
 });
