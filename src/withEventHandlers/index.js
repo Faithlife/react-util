@@ -1,4 +1,4 @@
-import React, { PureComponent, Component } from 'react';
+import React, { PureComponent, Component, forwardRef } from 'react';
 
 /** Binds event handlers onto functional components.
  *  Any methods specified as arguments to this function
@@ -9,7 +9,7 @@ import React, { PureComponent, Component } from 'react';
 export function withEventHandlers(eventHandlers, WrappedComponent, options = {}) {
 	const ComponentToExtend = options.isPure ? PureComponent : Component;
 
-	return class WithEventHandlers extends ComponentToExtend {
+	class WithEventHandlers extends ComponentToExtend {
 		static displayName = `WithEventHandlers(${WrappedComponent.displayName ||
 			WrappedComponent.name ||
 			'Unnamed Component'})`;
@@ -25,7 +25,10 @@ export function withEventHandlers(eventHandlers, WrappedComponent, options = {})
 		}
 
 		render() {
-			return <WrappedComponent {...this.props} {...this.eventHandlers} />;
+			const { forwardedRef, ...props } = this.props;
+			return <WrappedComponent {...props} {...this.eventHandlers} ref={forwardedRef} />;
 		}
-	};
+	}
+
+	return forwardRef((props, ref) => <WithEventHandlers {...props} forwardedRef={ref} />);
 }
